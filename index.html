@@ -1023,8 +1023,8 @@
             // Display funny name
             document.getElementById('funnyNameDisplay').textContent = `Welcome, "${funnyName}"! 🎉`;
             
-            // Create QR code data
-            const qrData = `Name: ${name}\nEmail: ${email}\nAlias: ${funnyName}\nMessage: ${message || 'Party Bound!'}`;
+            // Create QR code data with line breaks for readability
+            const qrData = `JUGALJI HOUSE PARTY\n\n🎉 GUEST: ${name}\n📧 Email: ${email}\n😎 Alias: ${funnyName}\n💬 Vibe: ${message || 'Party Bound!'}\n\n🚀 See you there!`;
             
             // Generate QR code
             document.getElementById('qrcode').innerHTML = '';
