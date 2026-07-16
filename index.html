@@ -651,6 +651,19 @@
             margin: 1rem 0;
             font-weight: bold;
         }
+
+        .location-link {
+            color: var(--gold);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .location-link:hover {
+            color: var(--pink);
+            border-bottom-color: var(--pink);
+        }
     </style>
 </head>
 <body>
@@ -730,7 +743,7 @@
                 </div>
                 <div style="margin-top: 1.5rem; font-size: 0.9rem; color: #ddd;">
                     <p><i class="far fa-calendar-alt" style="color:var(--pink)"></i> This Saturday • <i class="far fa-clock" style="color:var(--cyan)"></i> 7:30 PM Onwards</p>
-                    <p style="margin-top: 5px; font-weight: bold; color: var(--gold)"><i class="fas fa-map-marker-alt"></i> Mithaiji, T. Nagar</p>
+                    <p style="margin-top: 5px; font-weight: bold; color: var(--gold)"><i class="fas fa-map-marker-alt"></i> <a href="https://maps.google.com/?q=Mithaiji,+T.+Nagar" target="_blank" class="location-link">Mithaiji, T. Nagar</a></p>
                 </div>
             </div>
         </section>
