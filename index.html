@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 JUGALJI HOUSE PARTY 🎉</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #050508;
+            --purple: #a855f7;
+            --pink: #ec4899;
+            --blue: #3b82f6;
+            --cyan: #06b6d4;
+            --gold: #eab308;
+            --glass-bg: rgba(15, 12, 30, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --neon-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.15), transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.15), transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.1), transparent 50%);
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(236, 72, 153, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(236, 72, 153, 0.15);
+        }
+
+        .btn-glow {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .btn-purple {
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+            color: white;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+        }
+
+        .btn-purple:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 0 30px rgba(236, 72, 153, 0.7);
+        }
+
+        .btn-cyan {
+            background: linear-gradient(135deg, var(--cyan), var(--blue));
+            color: white;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+        }
+
+        .btn-cyan:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.7);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), #f59e0b);
+            color: #000;
+            box-shadow: 0 0 20px rgba(235, 179, 8, 0.4);
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 0 30px rgba(235, 179, 8, 0.7);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 5rem 0;
+        }
+
+        #gate-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #030008;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        #landing-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #06020f;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .floating-bg-emojis {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top:0; left:0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .floating-emoji {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0.15;
+            animation: floatAnim 8s infinite linear;
+        }
+
+        @keyframes floatAnim {
+            0% { transform: translateY(105vh) rotate(0deg); }
+            100% { transform: translateY(-10vh) rotate(360deg); }
+        }
+
+        .neon-title {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #fff, #a855f7, #ec4899, #06b6d4, #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 4s linear infinite;
+            text-align: center;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        .disco-ball-container {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .disco-ball {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at 30% 30%, #fff, #ccc, #555);
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(255,255,255,0.3), inset -10px -10px 30px rgba(0,0,0,0.7);
+            position: relative;
+            animation: spinBall 6s infinite linear;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.2) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(255,255,255,0.2) 2px, transparent 2px);
+            background-size: 10px 10px;
+        }
+
+        @keyframes spinBall {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .countdown-box {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.8rem 0.2rem;
+            border-radius: 12px;
+        }
+
+        .countdown-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--cyan);
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+        }
+
+        .countdown-lbl {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #aaa;
+            margin-top: 2px;
+        }
+
+        .rule-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 1rem 1.5rem;
+            margin: 0.8rem 0;
+            border-radius: 16px;
+            text-align: left;
+            font-weight: 600;
+            transform: translateX(0);
+            transition: all 0.3s ease;
+        }
+
+        .rule-card:hover {
+            transform: scale(1.03) translateX(5px);
+            background: rgba(255,255,255,0.06);
+        }
+
+        body.dj-mode-active {
+            animation: djBgPulse 0.5s infinite alternate;
+        }
+
+        body.dj-mode-active .glass-card {
+            background: rgba(5, 2, 15, 0.7);
+            border-color: var(--pink);
+            box-shadow: 0 0 25px rgba(236, 72, 153, 0.4);
+        }
+
+        @keyframes djBgPulse {
+            0% { background-color: #030008; }
+            100% { background-color: #12011a; }
+        }
+
+        .dj-equalizer {
+            display: none;
+            justify-content: center;
+            gap: 4px;
+            height: 40px;
+            margin-top: 15px;
+        }
+
+        body.dj-mode-active .dj-equalizer {
+            display: flex;
+        }
+
+        .eq-bar {
+            width: 6px;
+            background: var(--cyan);
+            height: 100%;
+            animation: danceBar 0.4s infinite alternate;
+            transform-origin: bottom;
+        }
+        .eq-bar:nth-child(2n) { background: var(--pink); animation-duration: 0.3s; }
+        .eq-bar:nth-child(3n) { background: var(--gold); animation-duration: 0.5s; }
+
+        @keyframes danceBar {
+            0% { transform: scaleY(0.1); }
+            100% { transform: scaleY(1.0); }
+        }
+
+        #audio-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .audio-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        #physics-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 99999;
+            pointer-events: none;
+        }
+
+        .response-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 100000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .toast-msg {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: linear-gradient(to right, var(--purple), var(--blue));
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            z-index: 999999;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .toast-msg.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* GAME STYLES */
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .game-card {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.1));
+            border: 2px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .game-card:hover {
+            transform: scale(1.05) translateY(-5px);
+            border-color: var(--pink);
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+        }
+
+        .game-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--gold);
+        }
+
+        .game-card p {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-bottom: 1rem;
+        }
+
+        .game-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 100001;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .game-modal.active {
+            display: flex;
+        }
+
+        .game-content {
+            background: var(--glass-bg);
+            border: 2px solid var(--pink);
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .game-content h2 {
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .close-game {
+            float: right;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--pink);
+        }
+
+        .close-game:hover {
+            color: var(--cyan);
+        }
+
+        .joke-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--cyan);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            text-align: left;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .joke-box p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #fff;
+        }
+
+        .trivia-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .trivia-btn {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--glass-border);
+            color: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .trivia-btn:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: var(--purple);
+        }
+
+        .trivia-btn.correct {
+            background: rgba(34, 197, 94, 0.3);
+            border-color: #22c55e;
+            animation: pulse 0.6s;
+        }
+
+        .trivia-btn.wrong {
+            background: rgba(239, 68, 68, 0.3);
+            border-color: #ef4444;
+            animation: shake 0.4s;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .spin-wheel {
+            width: 250px;
+            height: 250px;
+            margin: 2rem auto;
+            border-radius: 50%;
+            border: 4px solid var(--gold);
+            background: conic-gradient(
+                var(--purple) 0deg 45deg,
+                var(--pink) 45deg 90deg,
+                var(--cyan) 90deg 135deg,
+                var(--blue) 135deg 180deg,
+                var(--gold) 180deg 225deg,
+                #22c55e 225deg 270deg,
+                #ef4444 270deg 315deg,
+                #f59e0b 315deg 360deg
+            );
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            animation: spinning 0s linear;
+            cursor: pointer;
+        }
+
+        .spin-wheel.spinning {
+            animation: spinningAnim 4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            pointer-events: none;
+        }
+
+        @keyframes spinningAnim {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(1800deg); }
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -15px;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid var(--gold);
+            z-index: 10;
+        }
+
+        .spin-result {
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(235, 179, 8, 0.2);
+            border: 2px solid var(--gold);
+            border-radius: 12px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+            border: 2px solid var(--glass-border);
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            transform: perspective(1000px) rotateY(0deg);
+        }
+
+        .memory-card.flipped {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .memory-card.matched {
+            background: rgba(34, 197, 94, 0.3);
+            border-color: #22c55e;
+            cursor: not-allowed;
+        }
+
+        .roast-generator {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .roast-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        .score-display {
+            font-size: 1.3rem;
+            color: var(--cyan);
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-grid"></div>
+    <canvas id="physics-canvas"></canvas>
+    
+    <div id="toast" class="toast-msg"></div>
+
+    <!-- AUDIO TOGGLE -->
+    <div id="audio-controls">
+        <button class="audio-btn" onclick="toggleMute()" id="muteBtn">
+            <i class="fas fa-volume-mute"></i>
+        </button>
+    </div>
+
+    <!-- RESPONSE POPUP OVERLAY -->
+    <div id="responseOverlay" class="response-overlay" onclick="closeOverlay()">
+        <div class="glass-card" style="max-width: 450px;">
+            <h2 id="overlayEmoji" style="font-size: 3.5rem; margin-bottom: 1rem;">😎</h2>
+            <p id="overlayText" style="font-family:'Orbitron', sans-serif; font-size: 1.3rem; font-weight: bold; line-height: 1.4;"></p>
+            <p style="font-size: 0.8rem; color: #888; margin-top: 1.5rem;">Tap anywhere to continue</p>
+        </div>
+    </div>
+
+    <!-- =============================================================
+         ENTRY GATE SCREEN
+         ============================================================= -->
+    <div id="gate-screen">
+        <div class="glass-card" style="width: 100%; max-width: 450px;">
+            <h2 class="neon-title" style="font-size: 2rem;">SECURITY CHECK</h2>
+            <p style="margin-bottom: 2rem; font-weight: 500; color: #ccc;">Are you cool enough to attend this party?</p>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <button class="btn-glow btn-purple" onclick="handleGateAnswer(true)">😎 Obviously</button>
+                <button class="btn-glow btn-cyan" onclick="handleGateAnswer(false)">🤔 I have doubts</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =============================================================
+         LANDING SCREEN
+         ============================================================= -->
+    <div id="landing-screen" style="display: none;">
+        <div class="floating-bg-emojis" id="landingEmojis"></div>
+        <div class="disco-ball-container">
+            <div class="disco-ball"></div>
+        </div>
+        <div style="max-width: 500px; z-index: 5;">
+            <h1 class="neon-title" id="partyMainTitle">🎉 JUGALJI HOUSE PARTY 🎉</h1>
+            <p style="font-family: 'Orbitron', sans-serif; color: var(--gold); font-weight: 900; letter-spacing: 2px; margin-bottom: 1.5rem;">EAT. LAUGH. REPEAT. REGRET TOMORROW.</p>
+            <blockquote style="font-style: italic; background: rgba(255,255,255,0.05); padding: 1rem; border-left: 4px solid var(--pink); border-radius: 4px; margin-bottom: 2.5rem; color: #ddd;">
+                "Attendance is mandatory. Excuses are chargeable."
+            </blockquote>
+            <button class="btn-glow btn-purple" onclick="enterMainApp()">ENTER PARTY <i class="fas fa-bolt"></i></button>
+        </div>
+    </div>
+
+    <!-- =============================================================
+         MAIN INTERACTIVE APP CONTENT
+         ============================================================= -->
+    <main style="display: none;" id="main-content">
+        
+        <!-- COUNTDOWN -->
+        <section class="container" style="padding-top: 2rem;">
+            <div class="glass-card">
+                <h3 style="font-family:'Orbitron', sans-serif; font-size: 1.1rem; color: #fff; letter-spacing: 1px;">THE COUNTDOWN IS ALIVE</h3>
+                <div class="countdown-grid">
+                    <div class="countdown-box"><div class="countdown-num" id="cd-days">00</div><div class="countdown-lbl">Days</div></div>
+                    <div class="countdown-box"><div class="countdown-num" id="cd-hours">00</div><div class="countdown-lbl">Hrs</div></div>
+                    <div class="countdown-box"><div class="countdown-num" id="cd-mins">00</div><div class="countdown-lbl">Mins</div></div>
+                    <div class="countdown-box"><div class="countdown-num" id="cd-secs">00</div><div class="countdown-lbl">Secs</div></div>
+                </div>
+                <div style="margin-top: 1.5rem; font-size: 0.9rem; color: #ddd;">
+                    <p><i class="far fa-calendar-alt" style="color:var(--pink)"></i> This Saturday • <i class="far fa-clock" style="color:var(--cyan)"></i> 7:30 PM Onwards</p>
+                    <p style="margin-top: 5px; font-weight: bold; color: var(--gold)"><i class="fas fa-map-marker-alt"></i> Mithaiji, T. Nagar</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- DJ MODE QUICK TRIGGER -->
+        <section class="container" style="padding: 0 0 2rem 0;">
+            <div class="glass-card">
+                <h3>Bored with this design layout?</h3>
+                <p style="font-size: 0.85rem; color:#aaa; margin-bottom: 1.2rem;">Initiate complete cybernetic bass system overdrive.</p>
+                <button class="btn-glow btn-cyan" onclick="toggleDjMode()"><i class="fas fa-headphones"></i> <span id="djBtnText">Start Party Mode</span></button>
+                <div class="dj-equalizer">
+                    <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PARTY RULES -->
+        <section class="container" style="padding: 2rem 0;">
+            <div class="glass-card">
+                <h3 class="neon-title" style="font-size: 1.5rem; margin-bottom: 1.5rem;">🏠 LAW OF THE LAND</h3>
+                <div class="rule-card"><span style="font-size: 1.5rem;">❌</span> <span>No boring conversations or generic dynamic corporate update exchanges.</span></div>
+                <div class="rule-card"><span style="font-size: 1.5rem;">❌</span> <span>Work talk is highly illegal. App production logs will result in immediate exile.</span></div>
+                <div class="rule-card"><span style="font-size: 1.5rem;">✅</span> <span>Memes, dad jokes, and questionable life choices are MANDATORY.</span></div>
+                <div class="rule-card"><span style="font-size: 1.5rem;">✅</span> <span>Bring your A-game. Participation in games is not optional—it's survival.</span></div>
+                <div class="rule-card"><span style="font-size: 1.5rem;">⚠️</span> <span>Losing at party games results in eternal mockery. You've been warned.</span></div>
+            </div>
+        </section>
+
+        <!-- HILARIOUS GAMES SECTION -->
+        <section class="container" style="padding: 2rem 0;">
+            <div class="glass-card">
+                <h2 class="neon-title" style="font-size: 1.8rem; margin-bottom: 2rem;">🎮 PARTY GAME ARENA 🎮</h2>
+                <p style="color: #ddd; margin-bottom: 1.5rem;">Get ready to laugh, lose, and live with regrets!</p>
+                
+                <div class="game-container">
+                    <div class="game-card" onclick="openGame('jokes')">
+                        <h4>😂 Joke Lab</h4>
+                        <p>Terrible jokes that'll make you groan</p>
+                        <i class="fas fa-laugh" style="font-size: 2rem;"></i>
+                    </div>
+
+                    <div class="game-card" onclick="openGame('roast')">
+                        <h4>🔥 Roast Master</h4>
+                        <p>Generate hilarious insults</p>
+                        <i class="fas fa-fire" style="font-size: 2rem;"></i>
+                    </div>
+
+                    <div class="game-card" onclick="openGame('trivia')">
+                        <h4>🧠 Party Trivia</h4>
+                        <p>Prove you know useless facts</p>
+                        <i class="fas fa-brain" style="font-size: 2rem;"></i>
+                    </div>
+
+                    <div class="game-card" onclick="openGame('wheel')">
+                        <h4>🎡 Spin & Dare</h4>
+                        <p>Let fate decide your embarrassment</p>
+                        <i class="fas fa-circle-notch" style="font-size: 2rem;"></i>
+                    </div>
+
+                    <div class="game-card" onclick="openGame('memory')">
+                        <h4>🧩 Memory Madness</h4>
+                        <p>Pair emoji party rules if you can</p>
+                        <i class="fas fa-gamepad" style="font-size: 2rem;"></i>
+                    </div>
+
+                    <div class="game-card" onclick="openGame('guess')">
+                        <h4>🎯 Guess The Guest</h4>
+                        <p>Who's the wildest party animal?</p>
+                        <i class="fas fa-user-secret" style="font-size: 2rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RSVP SECTION -->
+        <section class="container" style="padding: 2rem 0 5rem 0;">
+            <div class="glass-card">
+                <h3 style="font-family:'Orbitron', sans-serif; font-size: 1.3rem; color: var(--gold); margin-bottom: 1.5rem;">📨 RSVP OR REGRET FOREVER</h3>
+                <form style="display: flex; flex-direction: column; gap: 1rem;">
+                    <input type="text" placeholder="Your name (if you dare)" style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: white;">
+                    <input type="email" placeholder="Your email (for regrets)" style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: white;">
+                    <textarea placeholder="Will you bring the vibes or the shame?" rows="3" style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: white; resize: none;"></textarea>
+                    <button type="submit" class="btn-glow btn-gold" style="margin-top: 1rem;">YES, I'M IN! 🚀</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =============================================================
+         GAME MODALS
+         ============================================================= -->
+    
+    <!-- Jokes Game -->
+    <div id="jokes-modal" class="game-modal">
+        <div class="game-content">
+            <span class="close-game" onclick="closeGame('jokes')">&times;</span>
+            <h2>😂 Joke Lab - Fair Warning: You'll Cringe</h2>
+            <div class="joke-box">
+                <p id="jokeText">Click to reveal a terrible joke...</p>
+            </div>
+            <button class="btn-glow btn-purple" onclick="showJoke()" style="width: 100%; margin-bottom: 1rem;">Tell me a joke!</button>
+            <button class="btn-glow btn-cyan" onclick="showJoke()" style="width: 100%;">More pain, please!</button>
+        </div>
+    </div>
+
+    <!-- Roast Game -->
+    <div id="roast-modal" class="game-modal">
+        <div class="game-content">
+            <span class="close-game" onclick="closeGame('roast')">&times;</span>
+            <h2>🔥 Roast Master - Time to Burn</h2>
+            <input type="text" id="roastName" placeholder="Enter a name to roast" style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: white; margin-bottom: 1rem;">
+            <button class="btn-glow btn-gold" onclick="generateRoast()" style="width: 100%; margin-bottom: 1.5rem;">🔥 ROAST THEM 🔥</button>
+            <div class="roast-generator" id="roastResult" style="display: none;">
+                <p class="roast-text" id="roastText"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trivia Game -->
+    <div id="trivia-modal" class="game-modal">
+        <div class="game-content">
+            <span class="close-game" onclick="closeGame('trivia')">&times;</span>
+            <h2>🧠 Party Trivia Challenge</h2>
+            <div class="score-display" id="triviaScore">Score: 0/0</div>
+            <p id="triviaQuestion" style="margin-bottom: 1.5rem; font-size: 1.1rem;"></p>
+            <div class="trivia-options" id="triviaOptions"></div>
+            <button class="btn-glow btn-cyan" onclick="nextTrivia()" style="width: 100%; margin-top: 1rem;">Next Question</button>
+        </div>
+    </div>
+
+    <!-- Spin & Dare -->
+    <div id="wheel-modal" class="game-modal">
+        <div class="game-content">
+            <span class="close-game" onclick="closeGame('wheel')">&times;</span>
+            <h2>🎡 Spin the Wheel of Embarrassment</h2>
+            <div class="wheel-pointer"></div>
+            <div class="spin-wheel" id="spinWheel" onclick="spinTheWheel()">
+                <span>🎰</span>
+            </div>
+            <div class="spin-result" id="wheelResult" style="display: none;">
+                <p id="wheelText"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Memory Game -->
+    <div id="memory-modal" class="game-modal">
+        <div class="game-content">
+            <span class="close-game" onclick="closeGame('memory')">&times;</span>
+            <h2>🧩 Memory Madness</h2>
+            <div class="score-display">Matches: <span id="memoryScore">0</span>/8</div>
+            <div class="memory-grid" id="memoryGrid"></div>
+            <button class="btn-glow btn-purple" onclick="resetMemory()" style="width: 100%; margin-top: 1rem;">Play Again</button>
+        </div>
+    </div>
+
+    <!-- Guess The Guest -->
+    <div id="guess-modal" class="game-modal">
+        <div class="game-content">
+            <span class="close-game" onclick="closeGame('guess')">&times;</span>
+            <h2>🎯 Guess The Guest</h2>
+            <p style="margin-bottom: 1.5rem; color: #aaa;">Who would most likely...</p>
+            <p id="guessQuestion" style="margin-bottom: 1.5rem; font-size: 1.2rem; color: var(--gold); font-weight: bold;"></p>
+            <div class="trivia-options" id="guessOptions"></div>
+            <button class="btn-glow btn-cyan" onclick="nextGuess()" style="width: 100%; margin-top: 1rem;">Next Question</button>
+        </div>
+    </div>
+
+    <script>
+        // ========== JOKES DATA ==========
+        const jokes = [
+            { q: "Why did the developer go broke?", a: "Because he used up all his cache!" },
+            { q: "How many programmers does it take to change a lightbulb?", a: "None, that's a hardware problem!" },
+            { q: "Why do Java developers wear glasses?", a: "Because they don't C#!" },
+            { q: "Why did the scarecrow win an award?", a: "He was outstanding in his field!" },
+            { q: "What do you call a fake noodle?", a: "An impasta!" },
+            { q: "I told my computer I needed a break, and now it won't stop sending me Kit-Kat ads.", a: "Send help." },
+            { q: "Why don't scientists trust atoms?", a: "Because they make up everything!" },
+            { q: "What's the object-oriented way to become wealthy?", a: "Inheritance!" },
+            { q: "A SQL query walks into a bar, walks up to two tables and asks...", a: "Can I join you?" },
+            { q: "Why did the math book look so sad?", a: "Because it had too many problems!" }
+        ];
+
+        const roasts = [
+            "You're like a human typo—nobody noticed you were supposed to be here.",
+            "If you were a vegetable, you'd be a turnip... because nobody wants you to stay.",
+            "You bring a lot to the table. Mostly just your chair.",
+            "I'd insult you more, but you might cry... or worse, invite me to another party.",
+            "You're proof that nature has a sense of humor.",
+            "I'd engage in a battle of wits, but you appear to be unarmed.",
+            "You're like a human version of a bad wifi connection—mostly just disappointing.",
+            "Did you fall from the stupid tree? Because you hit every branch on the way down.",
+            "You're not stupid, you just take longer to understand things. Like everyone. But longer.",
+            "If you tried to be a role model, your biggest achievement would be a cautionary tale."
+        ];
+
+        const triviaQuestions = [
+            {
+                q: "What year was the first iPhone released?",
+                options: ["2005", "2007", "2009", "2011"],
+                correct: 1
+            },
+            {
+                q: "How many strings does a standard guitar have?",
+                options: ["4", "6", "8", "10"],
+                correct: 1
+            },
+            {
+                q: "What is the capital of Australia?",
+                options: ["Sydney", "Melbourne", "Canberra", "Brisbane"],
+                correct: 2
+            },
+            {
+                q: "What's the only mammal that can't jump?",
+                options: ["Hippo", "Elephant", "Whale", "Ostrich"],
+                correct: 2
+            },
+            {
+                q: "How many bones are in the adult human body?",
+                options: ["186", "206", "226", "246"],
+                correct: 1
+            }
+        ];
+
+        const wheelOptions = [
+            "🤓 Do your best robot impression for the next 10 mins",
+            "🎤 Sing a song with your nose pinched",
+            "🕺 Dance like nobody's watching (they are)",
+            "🤐 Stay silent for 5 minutes",
+            "🎭 Use an accent for the rest of the night",
+            "📱 Show your most embarrassing photo",
+            "🤪 Tell your most questionable life choice",
+            "👑 Compliment everyone in the room (even the weird ones)"
+        ];
+
+        const memoryEmojis = ["🎉", "🎉", "🎊", "🎊", "🎈", "🎈", "🎁", "🎁", "🎮", "🎮", "🎯", "🎯", "🎲", "🎲", "🎪", "🎪"];
+
+        const guessQuestions = [
+            {
+                q: "First to do a terrible karaoke number?",
+                options: ["Sharma", "Patel", "You", "The Host"],
+                correct: 2
+            },
+            {
+                q: "Most likely to start a controversial food fight?",
+                options: ["The Quiet One", "The Loud One", "That One Guy", "You Again?"],
+                correct: 1
+            },
+            {
+                q: "Who'll end up being everyone's therapist?",
+                options: ["The Extrovert", "The Listener", "The Introvert", "Your Mom"],
+                correct: 1
+            },
+            {
+                q: "First to fall asleep at 11 PM?",
+                options: ["The Young Person", "The Old Person", "You", "The Host's Cat"],
+                correct: 2
+            },
+            {
+                q: "Most likely to leave with someone's Netflix password?",
+                options: ["The Hacker", "The Lazy One", "The Tech Guy", "Everyone"],
+                correct: 3
+            }
+        ];
+
+        // ========== GAME STATE ==========
+        let currentJoke = 0;
+        let currentTrivia = 0;
+        let triviaScore = 0;
+        let currentGuess = 0;
+        let memoryFlipped = [];
+        let memoryMatched = 0;
+        let wheelSpinning = false;
+
+        // ========== MAIN FLOW FUNCTIONS ==========
+        function handleGateAnswer(answer) {
+            if (answer) {
+                showOverlay("😎", "WELCOME, LEGEND!");
+                setTimeout(() => {
+                    document.getElementById('gate-screen').style.display = 'none';
+                    document.getElementById('landing-screen').style.display = 'flex';
+                    generateFloatingEmojis();
+                }, 800);
+            } else {
+                showOverlay("😬", "Your loss, buddy. More fun for us!");
+                setTimeout(() => {
+                    showOverlay("🚪", "Exit stage left →");
+                }, 2000);
+            }
+        }
+
+        function enterMainApp() {
+            document.getElementById('landing-screen').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        function showOverlay(emoji, text) {
+            document.getElementById('overlayEmoji').textContent = emoji;
+            document.getElementById('overlayText').textContent = text;
+            document.getElementById('responseOverlay').style.display = 'flex';
+        }
+
+        function closeOverlay() {
+            document.getElementById('responseOverlay').style.display = 'none';
+        }
+
+        // ========== COUNTDOWN ==========
+        function updateCountdown() {
+            const partyDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + (6 - new Date().getDay())).setHours(19, 30, 0);
+            const now = new Date().getTime();
+            const distance = partyDate - now;
+
+            if (distance < 0) {
+                document.getElementById('cd-days').textContent = "🎉";
+                document.getElementById('cd-hours').textContent = "🎉";
+                document.getElementById('cd-mins').textContent = "🎉";
+                document.getElementById('cd-secs').textContent = "🎉";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+            document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
+            document.getElementById('cd-secs').textContent = String(secs).padStart(2, '0');
+        }
+
+        // ========== DJ MODE ==========
+        function toggleDjMode() {
+            document.body.classList.toggle('dj-mode-active');
+            const btnText = document.getElementById('djBtnText');
+            btnText.textContent = document.body.classList.contains('dj-mode-active') ? 'Stop Party Mode' : 'Start Party Mode';
+        }
+
+        // ========== GAMES ==========
+        function openGame(game) {
+            document.getElementById(game + '-modal').classList.add('active');
+            if (game === 'jokes') showJoke();
+            if (game === 'trivia') startTrivia();
+            if (game === 'memory') initMemory();
+            if (game === 'guess') startGuess();
+        }
+
+        function closeGame(game) {
+            document.getElementById(game + '-modal').classList.remove('active');
+        }
+
+        // ========== JOKES GAME ==========
+        function showJoke() {
+            currentJoke = Math.floor(Math.random() * jokes.length);
+            const joke = jokes[currentJoke];
+            const jokeBox = document.getElementById('jokeText');
+            jokeBox.innerHTML = `<strong>${joke.q}</strong><br><br>${joke.a}`;
+        }
+
+        // ========== ROAST GAME ==========
+        function generateRoast() {
+            const name = document.getElementById('roastName').value || "You";
+            const roast = roasts[Math.floor(Math.random() * roasts.length)];
+            const roastResult = document.getElementById('roastResult');
+            const roastText = document.getElementById('roastText');
+            roastText.textContent = `${name}: ${roast}`;
+            roastResult.style.display = 'flex';
+        }
+
+        // ========== TRIVIA GAME ==========
+        function startTrivia() {
+            triviaScore = 0;
+            currentTrivia = 0;
+            loadTrivia();
+        }
+
+        function loadTrivia() {
+            if (currentTrivia >= triviaQuestions.length) {
+                showOverlay("🏆", `Quiz Complete! Score: ${triviaScore}/${triviaQuestions.length}`);
+                setTimeout(() => startTrivia(), 2000);
+                return;
+            }
+
+            const q = triviaQuestions[currentTrivia];
+            document.getElementById('triviaQuestion').textContent = q.q;
+            document.getElementById('triviaScore').textContent = `Score: ${triviaScore}/${currentTrivia}`;
+
+            const optionsHtml = q.options.map((opt, idx) => 
+                `<button class="trivia-btn" onclick="answerTrivia(${idx})">${opt}</button>`
+            ).join('');
+            document.getElementById('triviaOptions').innerHTML = optionsHtml;
+        }
+
+        function answerTrivia(idx) {
+            const q = triviaQuestions[currentTrivia];
+            const btns = document.querySelectorAll('#triviaOptions .trivia-btn');
+            
+            btns[idx].classList.add(idx === q.correct ? 'correct' : 'wrong');
+            if (idx === q.correct) triviaScore++;
+            
+            btns.forEach((btn, i) => btn.disabled = true);
+            setTimeout(nextTrivia, 1500);
+        }
+
+        function nextTrivia() {
+            currentTrivia++;
+            loadTrivia();
+        }
+
+        // ========== SPIN WHEEL ==========
+        function spinTheWheel() {
+            if (wheelSpinning) return;
+            wheelSpinning = true;
+
+            const wheel = document.getElementById('spinWheel');
+            const result = document.getElementById('wheelResult');
+            const wheelText = document.getElementById('wheelText');
+
+            wheel.classList.remove('spinning');
+            setTimeout(() => wheel.classList.add('spinning'), 10);
+
+            const selected = Math.floor(Math.random() * wheelOptions.length);
+            setTimeout(() => {
+                wheelText.textContent = wheelOptions[selected];
+                result.style.display = 'flex';
+                wheelSpinning = false;
+                result.style.display = 'none';
+                setTimeout(() => result.style.display = 'flex', 100);
+            }, 4100);
+        }
+
+        // ========== MEMORY GAME ==========
+        function initMemory() {
+            memoryFlipped = [];
+            memoryMatched = 0;
+            const grid = document.getElementById('memoryGrid');
+            grid.innerHTML = '';
+
+            memoryEmojis.sort(() => Math.random() - 0.5).forEach((emoji, idx) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.textContent = '?';
+                card.onclick = () => flipMemory(idx, card, emoji);
+                grid.appendChild(card);
+            });
+        }
+
+        function flipMemory(idx, card, emoji) {
+            if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+            if (memoryFlipped.length >= 2) return;
+
+            card.classList.add('flipped');
+            card.textContent = emoji;
+            memoryFlipped.push({ idx, card, emoji });
+
+            if (memoryFlipped.length === 2) {
+                setTimeout(() => {
+                    if (memoryFlipped[0].emoji === memoryFlipped[1].emoji) {
+                        memoryFlipped[0].card.classList.add('matched');
+                        memoryFlipped[1].card.classList.add('matched');
+                        memoryMatched++;
+                        document.getElementById('memoryScore').textContent = memoryMatched;
+                    } else {
+                        memoryFlipped[0].card.classList.remove('flipped');
+                        memoryFlipped[1].card.classList.remove('flipped');
+                        memoryFlipped[0].card.textContent = '?';
+                        memoryFlipped[1].card.textContent = '?';
+                    }
+                    memoryFlipped = [];
+                }, 1000);
+            }
+        }
+
+        function resetMemory() {
+            initMemory();
+        }
+
+        // ========== GUESS GAME ==========
+        function startGuess() {
+            currentGuess = 0;
+            loadGuess();
+        }
+
+        function loadGuess() {
+            if (currentGuess >= guessQuestions.length) {
+                showOverlay("👑", "You're a party legend!");
+                setTimeout(() => startGuess(), 2000);
+                return;
+            }
+
+            const q = guessQuestions[currentGuess];
+            document.getElementById('guessQuestion').textContent = q.q;
+
+            const optionsHtml = q.options.map((opt, idx) => 
+                `<button class="trivia-btn" onclick="answerGuess(${idx})">${opt}</button>`
+            ).join('');
+            document.getElementById('guessOptions').innerHTML = optionsHtml;
+        }
+
+        function answerGuess(idx) {
+            const q = guessQuestions[currentGuess];
+            const btns = document.querySelectorAll('#guessOptions .trivia-btn');
+            
+            btns[idx].classList.add(idx === q.correct ? 'correct' : 'wrong');
+            btns.forEach((btn, i) => btn.disabled = true);
+            setTimeout(nextGuess, 1500);
+        }
+
+        function nextGuess() {
+            currentGuess++;
+            loadGuess();
+        }
+
+        // ========== UTILITIES ==========
+        function generateFloatingEmojis() {
+            const container = document.getElementById('landingEmojis');
+            const emojis = ['🎉', '🎊', '🎈', '🎁', '🎯', '🎪', '🎭', '🎨'];
+            for (let i = 0; i < 15; i++) {
+                const emoji = document.createElement('div');
+                emoji.className = 'floating-emoji';
+                emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                emoji.style.left = Math.random() * 100 + '%';
+                emoji.style.animationDelay = Math.random() * 8 + 's';
+                emoji.style.animationDuration = (Math.random() * 5 + 8) + 's';
+                container.appendChild(emoji);
+            }
+        }
+
+        function toggleMute() {
+            const btn = document.getElementById('muteBtn');
+            btn.innerHTML = btn.innerHTML.includes('volume-mute') 
+                ? '<i class="fas fa-volume-up"></i>' 
+                : '<i class="fas fa-volume-mute"></i>';
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            generateFloatingEmojis();
+        });
+    </script>
+
+</body>
+</html>
