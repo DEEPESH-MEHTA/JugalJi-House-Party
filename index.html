@@ -684,6 +684,7 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+            min-height: 300px;
         }
 
         .qr-message {
@@ -725,6 +726,45 @@
         input[type="email"]::placeholder,
         textarea::placeholder {
             color: #888;
+        }
+
+        /* QR Data Info Box */
+        .qr-info-box {
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            text-align: left;
+        }
+
+        .qr-info-box h4 {
+            color: var(--gold);
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .qr-info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+
+        .qr-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .qr-info-label {
+            color: var(--cyan);
+            font-weight: 600;
+        }
+
+        .qr-info-value {
+            color: #fff;
+            word-break: break-word;
         }
     </style>
 </head>
@@ -900,8 +940,30 @@
                     <div class="qr-container">
                         <div class="funny-name" id="funnyNameDisplay"></div>
                         <div id="qrcode"></div>
-                        <div class="qr-message">📸 TAKE A SCREEN-SHORT 📸</div>
-                        <button class="btn-glow btn-cyan" onclick="resetRSVP()">RSVP Another Guest</button>
+                        <div class="qr-message">📸 SCAN FOR DETAILS 📸</div>
+                        
+                        <!-- Guest Info Display -->
+                        <div class="qr-info-box">
+                            <h4>✨ Your Party Ticket ✨</h4>
+                            <div class="qr-info-item">
+                                <span class="qr-info-label">Guest Name:</span>
+                                <span class="qr-info-value" id="infoName">-</span>
+                            </div>
+                            <div class="qr-info-item">
+                                <span class="qr-info-label">Email:</span>
+                                <span class="qr-info-value" id="infoEmail">-</span>
+                            </div>
+                            <div class="qr-info-item">
+                                <span class="qr-info-label">Alias:</span>
+                                <span class="qr-info-value" id="infoAlias">-</span>
+                            </div>
+                            <div class="qr-info-item">
+                                <span class="qr-info-label">Vibe:</span>
+                                <span class="qr-info-value" id="infoVibe">Party Bound! 🎉</span>
+                            </div>
+                        </div>
+
+                        <button class="btn-glow btn-cyan" onclick="resetRSVP()" style="margin-top: 1.5rem;">RSVP Another Guest</button>
                     </div>
                 </div>
             </div>
@@ -1007,6 +1069,8 @@
         }
 
         // ========== RSVP & QR CODE ==========
+        let rsvpData = {};
+
         function handleRSVP(event) {
             event.preventDefault();
             
@@ -1016,6 +1080,14 @@
             
             const funnyName = generateFunnyName();
             
+            // Store data for display
+            rsvpData = {
+                name: name,
+                email: email,
+                message: message,
+                alias: funnyName
+            };
+            
             // Hide form and show QR
             document.getElementById('rsvpFormSection').classList.remove('active');
             document.getElementById('qrSection').classList.add('active');
@@ -1023,8 +1095,15 @@
             // Display funny name
             document.getElementById('funnyNameDisplay').textContent = `Welcome, "${funnyName}"! 🎉`;
             
-            // Create QR code data with line breaks for readability
-            const qrData = `JUGALJI HOUSE PARTY\n\n🎉 GUEST: ${name}\n📧 Email: ${email}\n😎 Alias: ${funnyName}\n💬 Vibe: ${message || 'Party Bound!'}\n\n🚀 See you there!`;
+            // Populate info box
+            document.getElementById('infoName').textContent = name;
+            document.getElementById('infoEmail').textContent = email;
+            document.getElementById('infoAlias').textContent = funnyName;
+            document.getElementById('infoVibe').textContent = message || 'Party Bound! 🎉';
+            
+            // Create QR code with SINGLE LINE text (no newlines)
+            // QRCode.js doesn't support multiline text, so we use a compact format
+            const qrData = `JUGALJI|${name}|${email}|${funnyName}`;
             
             // Generate QR code
             document.getElementById('qrcode').innerHTML = '';
@@ -1033,7 +1112,8 @@
                 width: 250,
                 height: 250,
                 colorDark: "#000000",
-                colorLight: "#ffffff"
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
             });
         }
 
@@ -1043,6 +1123,7 @@
             document.getElementById('rsvpName').value = '';
             document.getElementById('rsvpEmail').value = '';
             document.getElementById('rsvpMessage').value = '';
+            rsvpData = {};
         }
 
         // ========== AUDIO MANAGEMENT ==========
