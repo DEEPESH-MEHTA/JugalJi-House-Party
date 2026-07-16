@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style>
         :root {
@@ -664,6 +666,66 @@
             color: var(--pink);
             border-bottom-color: var(--pink);
         }
+
+        /* QR CODE STYLES */
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        #qrcode {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+        }
+
+        .qr-message {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(235, 179, 8, 0.5);
+            animation: qrPulse 1s infinite;
+        }
+
+        @keyframes qrPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .funny-name {
+            font-size: 1.2rem;
+            color: var(--pink);
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .qr-form-section {
+            display: none;
+        }
+
+        .qr-form-section.active {
+            display: block;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            color: white;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="email"]::placeholder,
+        textarea::placeholder {
+            color: #888;
+        }
     </style>
 </head>
 <body>
@@ -822,12 +884,26 @@
         <section class="container" style="padding: 2rem 0 5rem 0;">
             <div class="glass-card">
                 <h3 style="font-family:'Orbitron', sans-serif; font-size: 1.3rem; color: var(--gold); margin-bottom: 1.5rem;">📨 RSVP OR REGRET FOREVER</h3>
-                <form style="display: flex; flex-direction: column; gap: 1rem;">
-                    <input type="text" placeholder="Your name (if you dare)" style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: white;">
-                    <input type="email" placeholder="Your email (for regrets)" style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: white;">
-                    <textarea placeholder="Will you bring the vibes or the shame?" rows="3" style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: white;"></textarea>
-                    <button type="submit" class="btn-glow btn-gold" style="margin-top: 1rem;">YES, I'M IN! 🚀</button>
-                </form>
+                
+                <!-- RSVP Form -->
+                <div id="rsvpFormSection" class="qr-form-section active">
+                    <form style="display: flex; flex-direction: column; gap: 1rem;" onsubmit="handleRSVP(event)">
+                        <input type="text" id="rsvpName" placeholder="Your name (if you dare)" required style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px;">
+                        <input type="email" id="rsvpEmail" placeholder="Your email (for regrets)" required style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px;">
+                        <textarea id="rsvpMessage" placeholder="Will you bring the vibes or the shame?" rows="3" style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px;"></textarea>
+                        <button type="submit" class="btn-glow btn-gold" style="margin-top: 1rem;">YES, I'M IN! 🚀</button>
+                    </form>
+                </div>
+
+                <!-- QR Code Section -->
+                <div id="qrSection" class="qr-form-section">
+                    <div class="qr-container">
+                        <div class="funny-name" id="funnyNameDisplay"></div>
+                        <div id="qrcode"></div>
+                        <div class="qr-message">📸 TAKE A SCREEN-SHORT 📸</div>
+                        <button class="btn-glow btn-cyan" onclick="resetRSVP()">RSVP Another Guest</button>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -914,6 +990,61 @@
     </div>
 
     <script>
+        // ========== FUNNY NAME GENERATOR ==========
+        const funnyNames = [
+            "The Party Llama", "Captain Chaos", "Disco Fever", "The Meme Lord",
+            "Party Shark", "Social Butterfly", "Vibe Checker", "The Legend",
+            "Pizza Connoisseur", "Dance Machine", "The Joker", "Selfie Wizard",
+            "Night Owl", "Trouble Maker", "The Storyteller", "Energy Bomb",
+            "The Smooth Operator", "Laughter Pill", "Trend Setter", "The Wildcard",
+            "Comedy King", "The Life of Party", "Rhythm Master", "Banter Beast",
+            "The Entertainer", "Chatterbox Supreme", "The Absolute Unit", "Vibes Only",
+            "The Beast Mode", "Ultimate Vibe", "Game Changer", "Party Animal Deluxe"
+        ];
+
+        function generateFunnyName() {
+            return funnyNames[Math.floor(Math.random() * funnyNames.length)];
+        }
+
+        // ========== RSVP & QR CODE ==========
+        function handleRSVP(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('rsvpName').value;
+            const email = document.getElementById('rsvpEmail').value;
+            const message = document.getElementById('rsvpMessage').value;
+            
+            const funnyName = generateFunnyName();
+            
+            // Hide form and show QR
+            document.getElementById('rsvpFormSection').classList.remove('active');
+            document.getElementById('qrSection').classList.add('active');
+            
+            // Display funny name
+            document.getElementById('funnyNameDisplay').textContent = `Welcome, "${funnyName}"! 🎉`;
+            
+            // Create QR code data
+            const qrData = `Name: ${name}\nEmail: ${email}\nAlias: ${funnyName}\nMessage: ${message || 'Party Bound!'}`;
+            
+            // Generate QR code
+            document.getElementById('qrcode').innerHTML = '';
+            new QRCode(document.getElementById('qrcode'), {
+                text: qrData,
+                width: 250,
+                height: 250,
+                colorDark: "#000000",
+                colorLight: "#ffffff"
+            });
+        }
+
+        function resetRSVP() {
+            document.getElementById('rsvpFormSection').classList.add('active');
+            document.getElementById('qrSection').classList.remove('active');
+            document.getElementById('rsvpName').value = '';
+            document.getElementById('rsvpEmail').value = '';
+            document.getElementById('rsvpMessage').value = '';
+        }
+
         // ========== AUDIO MANAGEMENT ==========
         let isMuted = true;
         const audio = document.getElementById('partyAudio');
@@ -936,11 +1067,9 @@
             if (document.body.classList.contains('dj-mode-active')) {
                 document.body.classList.remove('dj-mode-active');
                 djBtn.textContent = 'Start Party Mode';
-                // Keep music playing if it was on
             } else {
                 document.body.classList.add('dj-mode-active');
                 djBtn.textContent = 'Stop Party Mode';
-                // Auto-play music when entering DJ mode
                 if (isMuted) {
                     audio.play();
                     isMuted = false;
