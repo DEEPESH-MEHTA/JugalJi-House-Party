@@ -658,6 +658,11 @@
     <div class="bg-grid"></div>
     <canvas id="physics-canvas"></canvas>
     
+    <!-- AUDIO ELEMENT FOR PARTY MUSIC -->
+    <audio id="partyAudio" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+    
     <div id="toast" class="toast-msg"></div>
 
     <!-- AUDIO TOGGLE -->
@@ -807,7 +812,7 @@
                 <form style="display: flex; flex-direction: column; gap: 1rem;">
                     <input type="text" placeholder="Your name (if you dare)" style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: white;">
                     <input type="email" placeholder="Your email (for regrets)" style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: white;">
-                    <textarea placeholder="Will you bring the vibes or the shame?" rows="3" style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: white; resize: none;"></textarea>
+                    <textarea placeholder="Will you bring the vibes or the shame?" rows="3" style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: white;"></textarea>
                     <button type="submit" class="btn-glow btn-gold" style="margin-top: 1rem;">YES, I'M IN! 🚀</button>
                 </form>
             </div>
@@ -837,7 +842,7 @@
         <div class="game-content">
             <span class="close-game" onclick="closeGame('roast')">&times;</span>
             <h2>🔥 Roast Master - Time to Burn</h2>
-            <input type="text" id="roastName" placeholder="Enter a name to roast" style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: white; margin-bottom: 1rem;">
+            <input type="text" id="roastName" placeholder="Enter a name to roast" style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: white;">
             <button class="btn-glow btn-gold" onclick="generateRoast()" style="width: 100%; margin-bottom: 1.5rem;">🔥 ROAST THEM 🔥</button>
             <div class="roast-generator" id="roastResult" style="display: none;">
                 <p class="roast-text" id="roastText"></p>
@@ -896,6 +901,41 @@
     </div>
 
     <script>
+        // ========== AUDIO MANAGEMENT ==========
+        let isMuted = true;
+        const audio = document.getElementById('partyAudio');
+        
+        function toggleMute() {
+            const muteBtn = document.getElementById('muteBtn');
+            if (isMuted) {
+                audio.play();
+                isMuted = false;
+                muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            } else {
+                audio.pause();
+                isMuted = true;
+                muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            }
+        }
+
+        function toggleDjMode() {
+            const djBtn = document.getElementById('djBtnText');
+            if (document.body.classList.contains('dj-mode-active')) {
+                document.body.classList.remove('dj-mode-active');
+                djBtn.textContent = 'Start Party Mode';
+                // Keep music playing if it was on
+            } else {
+                document.body.classList.add('dj-mode-active');
+                djBtn.textContent = 'Stop Party Mode';
+                // Auto-play music when entering DJ mode
+                if (isMuted) {
+                    audio.play();
+                    isMuted = false;
+                    document.getElementById('muteBtn').innerHTML = '<i class="fas fa-volume-up"></i>';
+                }
+            }
+        }
+
         // ========== JOKES DATA ==========
         const jokes = [
             { q: "Why did the developer go broke?", a: "Because he used up all his cache!" },
@@ -998,23 +1038,17 @@
         let triviaScore = 0;
         let currentGuess = 0;
         let memoryFlipped = [];
-        let memoryMatched = 0;
-        let wheelSpinning = false;
+        let memoryMatched = [];
+        let memoryCards = [];
 
-        // ========== MAIN FLOW FUNCTIONS ==========
+        // ========== NAVIGATION ==========
         function handleGateAnswer(answer) {
             if (answer) {
-                showOverlay("😎", "WELCOME, LEGEND!");
-                setTimeout(() => {
-                    document.getElementById('gate-screen').style.display = 'none';
-                    document.getElementById('landing-screen').style.display = 'flex';
-                    generateFloatingEmojis();
-                }, 800);
+                document.getElementById('gate-screen').style.display = 'none';
+                document.getElementById('landing-screen').style.display = 'flex';
+                createFloatingEmojis();
             } else {
-                showOverlay("😬", "Your loss, buddy. More fun for us!");
-                setTimeout(() => {
-                    showOverlay("🚪", "Exit stage left →");
-                }, 2000);
+                showOverlay('😢', "Aw, don't be shy! Everyone is cool enough for this party!");
             }
         }
 
@@ -1037,168 +1071,170 @@
 
         // ========== COUNTDOWN ==========
         function updateCountdown() {
-            const partyDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + (6 - new Date().getDay())).setHours(19, 30, 0);
+            const partyDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + ((6 - new Date().getDay() + 7) % 7), 19, 30).getTime();
             const now = new Date().getTime();
             const distance = partyDate - now;
 
-            if (distance < 0) {
-                document.getElementById('cd-days').textContent = "🎉";
-                document.getElementById('cd-hours').textContent = "🎉";
-                document.getElementById('cd-mins').textContent = "🎉";
-                document.getElementById('cd-secs').textContent = "🎉";
-                return;
-            }
-
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const secs = Math.floor((distance % (1000 * 60)) / 1000);
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
             document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
             document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
-            document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
-            document.getElementById('cd-secs').textContent = String(secs).padStart(2, '0');
+            document.getElementById('cd-mins').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('cd-secs').textContent = String(seconds).padStart(2, '0');
         }
 
-        // ========== DJ MODE ==========
-        function toggleDjMode() {
-            document.body.classList.toggle('dj-mode-active');
-            const btnText = document.getElementById('djBtnText');
-            btnText.textContent = document.body.classList.contains('dj-mode-active') ? 'Stop Party Mode' : 'Start Party Mode';
+        // ========== FLOATING EMOJIS ==========
+        function createFloatingEmojis() {
+            const emojis = ['🎉', '🎊', '🎈', '🎁', '🎮', '🎯'];
+            const container = document.getElementById('landingEmojis');
+            for (let i = 0; i < 15; i++) {
+                const emoji = document.createElement('div');
+                emoji.className = 'floating-emoji';
+                emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                emoji.style.left = Math.random() * 100 + '%';
+                emoji.style.top = -10 + 'px';
+                emoji.style.animationDelay = Math.random() * 8 + 's';
+                container.appendChild(emoji);
+            }
         }
 
-        // ========== GAMES ==========
+        // ========== GAME FUNCTIONS ==========
         function openGame(game) {
             document.getElementById(game + '-modal').classList.add('active');
-            if (game === 'jokes') showJoke();
-            if (game === 'trivia') startTrivia();
-            if (game === 'memory') initMemory();
-            if (game === 'guess') startGuess();
+            if (game === 'jokes') {
+                currentJoke = 0;
+                showJoke();
+            } else if (game === 'trivia') {
+                currentTrivia = 0;
+                triviaScore = 0;
+                showTrivia();
+            } else if (game === 'memory') {
+                initMemory();
+            } else if (game === 'guess') {
+                currentGuess = 0;
+                showGuess();
+            }
         }
 
         function closeGame(game) {
             document.getElementById(game + '-modal').classList.remove('active');
         }
 
-        // ========== JOKES GAME ==========
+        // ========== JOKE GAME ==========
         function showJoke() {
-            currentJoke = Math.floor(Math.random() * jokes.length);
-            const joke = jokes[currentJoke];
-            const jokeBox = document.getElementById('jokeText');
-            jokeBox.innerHTML = `<strong>${joke.q}</strong><br><br>${joke.a}`;
+            const joke = jokes[currentJoke % jokes.length];
+            document.getElementById('jokeText').innerHTML = `<strong>Q:</strong> ${joke.q}<br><strong>A:</strong> ${joke.a}`;
+            currentJoke++;
         }
 
         // ========== ROAST GAME ==========
         function generateRoast() {
-            const name = document.getElementById('roastName').value || "You";
+            const name = document.getElementById('roastName').value || 'You';
             const roast = roasts[Math.floor(Math.random() * roasts.length)];
-            const roastResult = document.getElementById('roastResult');
-            const roastText = document.getElementById('roastText');
-            roastText.textContent = `${name}: ${roast}`;
-            roastResult.style.display = 'flex';
+            document.getElementById('roastText').textContent = `${name}: ${roast}`;
+            document.getElementById('roastResult').style.display = 'flex';
         }
 
         // ========== TRIVIA GAME ==========
-        function startTrivia() {
-            triviaScore = 0;
-            currentTrivia = 0;
-            loadTrivia();
-        }
-
-        function loadTrivia() {
+        function showTrivia() {
             if (currentTrivia >= triviaQuestions.length) {
-                showOverlay("🏆", `Quiz Complete! Score: ${triviaScore}/${triviaQuestions.length}`);
-                setTimeout(() => startTrivia(), 2000);
+                showOverlay('🏆', `You scored ${triviaScore}/${triviaQuestions.length}!`);
+                closeGame('trivia');
+                currentTrivia = 0;
+                triviaScore = 0;
                 return;
             }
-
             const q = triviaQuestions[currentTrivia];
+            document.getElementById('triviaScore').textContent = `Score: ${triviaScore}/${triviaQuestions.length}`;
             document.getElementById('triviaQuestion').textContent = q.q;
-            document.getElementById('triviaScore').textContent = `Score: ${triviaScore}/${currentTrivia}`;
-
-            const optionsHtml = q.options.map((opt, idx) => 
-                `<button class="trivia-btn" onclick="answerTrivia(${idx})">${opt}</button>`
-            ).join('');
-            document.getElementById('triviaOptions').innerHTML = optionsHtml;
+            const opts = document.getElementById('triviaOptions');
+            opts.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'trivia-btn';
+                btn.textContent = opt;
+                btn.onclick = () => checkTriviaAnswer(i, q.correct);
+                opts.appendChild(btn);
+            });
         }
 
-        function answerTrivia(idx) {
-            const q = triviaQuestions[currentTrivia];
-            const btns = document.querySelectorAll('#triviaOptions .trivia-btn');
-            
-            btns[idx].classList.add(idx === q.correct ? 'correct' : 'wrong');
-            if (idx === q.correct) triviaScore++;
-            
-            btns.forEach((btn, i) => btn.disabled = true);
-            setTimeout(nextTrivia, 1500);
+        function checkTriviaAnswer(selected, correct) {
+            const btns = document.querySelectorAll('.trivia-btn');
+            if (selected === correct) {
+                btns[selected].classList.add('correct');
+                triviaScore++;
+            } else {
+                btns[selected].classList.add('wrong');
+                btns[correct].classList.add('correct');
+            }
+            btns.forEach(btn => btn.disabled = true);
         }
 
         function nextTrivia() {
             currentTrivia++;
-            loadTrivia();
+            showTrivia();
         }
 
-        // ========== SPIN WHEEL ==========
+        // ========== SPIN THE WHEEL ==========
         function spinTheWheel() {
-            if (wheelSpinning) return;
-            wheelSpinning = true;
-
             const wheel = document.getElementById('spinWheel');
-            const result = document.getElementById('wheelResult');
-            const wheelText = document.getElementById('wheelText');
-
-            wheel.classList.remove('spinning');
-            setTimeout(() => wheel.classList.add('spinning'), 10);
-
-            const selected = Math.floor(Math.random() * wheelOptions.length);
+            if (wheel.classList.contains('spinning')) return;
+            wheel.classList.add('spinning');
+            const result = wheelOptions[Math.floor(Math.random() * wheelOptions.length)];
             setTimeout(() => {
-                wheelText.textContent = wheelOptions[selected];
-                result.style.display = 'flex';
-                wheelSpinning = false;
-                result.style.display = 'none';
-                setTimeout(() => result.style.display = 'flex', 100);
-            }, 4100);
+                document.getElementById('wheelText').textContent = result;
+                document.getElementById('wheelResult').style.display = 'flex';
+                wheel.classList.remove('spinning');
+            }, 4000);
         }
 
         // ========== MEMORY GAME ==========
         function initMemory() {
             memoryFlipped = [];
-            memoryMatched = 0;
+            memoryMatched = [];
+            memoryCards = [...memoryEmojis].sort(() => Math.random() - 0.5);
             const grid = document.getElementById('memoryGrid');
             grid.innerHTML = '';
-
-            memoryEmojis.sort(() => Math.random() - 0.5).forEach((emoji, idx) => {
-                const card = document.createElement('div');
-                card.className = 'memory-card';
-                card.textContent = '?';
-                card.onclick = () => flipMemory(idx, card, emoji);
-                grid.appendChild(card);
+            memoryCards.forEach((card, i) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'memory-card';
+                cardEl.textContent = '?';
+                cardEl.onclick = () => flipCard(i);
+                grid.appendChild(cardEl);
             });
+            document.getElementById('memoryScore').textContent = '0';
         }
 
-        function flipMemory(idx, card, emoji) {
-            if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
-            if (memoryFlipped.length >= 2) return;
-
+        function flipCard(i) {
+            if (memoryFlipped.includes(i) || memoryMatched.includes(i)) return;
+            memoryFlipped.push(i);
+            const card = document.querySelectorAll('.memory-card')[i];
             card.classList.add('flipped');
-            card.textContent = emoji;
-            memoryFlipped.push({ idx, card, emoji });
-
+            card.textContent = memoryCards[i];
             if (memoryFlipped.length === 2) {
-                setTimeout(() => {
-                    if (memoryFlipped[0].emoji === memoryFlipped[1].emoji) {
-                        memoryFlipped[0].card.classList.add('matched');
-                        memoryFlipped[1].card.classList.add('matched');
-                        memoryMatched++;
-                        document.getElementById('memoryScore').textContent = memoryMatched;
-                    } else {
-                        memoryFlipped[0].card.classList.remove('flipped');
-                        memoryFlipped[1].card.classList.remove('flipped');
-                        memoryFlipped[0].card.textContent = '?';
-                        memoryFlipped[1].card.textContent = '?';
-                    }
-                    memoryFlipped = [];
-                }, 1000);
+                setTimeout(checkMemoryMatch, 500);
+            }
+        }
+
+        function checkMemoryMatch() {
+            const [a, b] = memoryFlipped;
+            if (memoryCards[a] === memoryCards[b]) {
+                memoryMatched.push(a, b);
+                memoryFlipped = [];
+                document.getElementById('memoryScore').textContent = memoryMatched.length / 2;
+                if (memoryMatched.length === memoryCards.length) {
+                    showOverlay('🎉', 'You matched all pairs!');
+                    closeGame('memory');
+                }
+            } else {
+                memoryFlipped.forEach(i => {
+                    document.querySelectorAll('.memory-card')[i].classList.remove('flipped');
+                    document.querySelectorAll('.memory-card')[i].textContent = '?';
+                });
+                memoryFlipped = [];
             }
         }
 
@@ -1207,75 +1243,45 @@
         }
 
         // ========== GUESS GAME ==========
-        function startGuess() {
-            currentGuess = 0;
-            loadGuess();
-        }
-
-        function loadGuess() {
+        function showGuess() {
             if (currentGuess >= guessQuestions.length) {
-                showOverlay("👑", "You're a party legend!");
-                setTimeout(() => startGuess(), 2000);
+                showOverlay('😂', 'You know your guests!');
+                closeGame('guess');
+                currentGuess = 0;
                 return;
             }
-
             const q = guessQuestions[currentGuess];
             document.getElementById('guessQuestion').textContent = q.q;
-
-            const optionsHtml = q.options.map((opt, idx) => 
-                `<button class="trivia-btn" onclick="answerGuess(${idx})">${opt}</button>`
-            ).join('');
-            document.getElementById('guessOptions').innerHTML = optionsHtml;
-        }
-
-        function answerGuess(idx) {
-            const q = guessQuestions[currentGuess];
-            const btns = document.querySelectorAll('#guessOptions .trivia-btn');
-            
-            btns[idx].classList.add(idx === q.correct ? 'correct' : 'wrong');
-            btns.forEach((btn, i) => btn.disabled = true);
-            setTimeout(nextGuess, 1500);
+            const opts = document.getElementById('guessOptions');
+            opts.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'trivia-btn';
+                btn.textContent = opt;
+                btn.onclick = () => {
+                    if (i === q.correct) {
+                        btn.classList.add('correct');
+                    } else {
+                        btn.classList.add('wrong');
+                        document.querySelectorAll('#guessOptions .trivia-btn')[q.correct].classList.add('correct');
+                    }
+                };
+                opts.appendChild(btn);
+            });
         }
 
         function nextGuess() {
             currentGuess++;
-            loadGuess();
+            showGuess();
         }
 
-        // ========== UTILITIES ==========
-        function generateFloatingEmojis() {
-            const container = document.getElementById('landingEmojis');
-            const emojis = ['🎉', '🎊', '🎈', '🎁', '🎯', '🎪', '🎭', '🎨'];
-            for (let i = 0; i < 15; i++) {
-                const emoji = document.createElement('div');
-                emoji.className = 'floating-emoji';
-                emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                emoji.style.left = Math.random() * 100 + '%';
-                emoji.style.animationDelay = Math.random() * 8 + 's';
-                emoji.style.animationDuration = (Math.random() * 5 + 8) + 's';
-                container.appendChild(emoji);
-            }
-        }
-
-        function toggleMute() {
-            const btn = document.getElementById('muteBtn');
-            btn.innerHTML = btn.innerHTML.includes('volume-mute') 
-                ? '<i class="fas fa-volume-up"></i>' 
-                : '<i class="fas fa-volume-mute"></i>';
-        }
-
+        // ========== TOAST NOTIFICATIONS ==========
         function showToast(msg) {
             const toast = document.getElementById('toast');
             toast.textContent = msg;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            generateFloatingEmojis();
-        });
     </script>
-
 </body>
 </html>
