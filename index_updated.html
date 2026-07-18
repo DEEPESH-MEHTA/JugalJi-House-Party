@@ -717,13 +717,13 @@
         }
 
         input[type="text"],
-        input[type="school"],
+        input[type="text"],
         textarea {
             color: white;
         }
 
         input[type="text"]::placeholder,
-        input[type="school"]::placeholder,
+        input[type="text"]::placeholder,
         textarea::placeholder {
             color: #888;
         }
@@ -844,7 +844,7 @@
                     <div class="countdown-box"><div class="countdown-num" id="cd-secs">00</div><div class="countdown-lbl">Secs</div></div>
                 </div>
                 <div style="margin-top: 1.5rem; font-size: 0.9rem; color: #ddd;">
-                    <p><i class="far fa-calendar-alt" style="color:var(--pink)"></i> This Saturday • <i class="far fa-clock" style="color:var(--cyan)"></i> 7:30 PM Onwards</p>
+                    <p><i class="far fa-calendar-alt" style="color:var(--pink)"></i> This Saturday • <i class="far fa-clock" style="color:var(--cyan)"></i> 10:30 PM Onwards</p>
                     <p style="margin-top: 5px; font-weight: bold; color: var(--gold)"><i class="fas fa-map-marker-alt"></i> <a href="https://maps.google.com/?q=Mithaiji,+T.+Nagar" target="_blank" class="location-link">Mithaiji, T. Nagar</a></p>
                 </div>
             </div>
@@ -929,7 +929,7 @@
                 <div id="rsvpFormSection" class="qr-form-section active">
                     <form style="display: flex; flex-direction: column; gap: 1rem;" onsubmit="handleRSVP(event)">
                         <input type="text" id="rsvpName" placeholder="Your name (if you dare)" required style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px;">
-                        <input type="text" id="rsvpSchool" placeholder="Your school" required style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px;">
+                        <input type="text" id="rsvpSchool" placeholder="Your School" required style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px;">
                         <textarea id="rsvpMessage" placeholder="Will you bring the vibes or the shame?" rows="3" style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px;"></textarea>
                         <button type="submit" class="btn-glow btn-gold" style="margin-top: 1rem;">YES, I'M IN! 🚀</button>
                     </form>
@@ -1103,7 +1103,7 @@
             
             // Create QR code with SINGLE LINE text (no newlines)
             // QRCode.js doesn't support multiline text, so we use a compact format
-            const qrData = JSON.stringify({event:'JUGALJI',name:name,school:school,alias:funnyName,message:message});
+            const qrData = `JUGALJI|${name}|${school}|${funnyName}`;
             
             // Generate QR code
             document.getElementById('qrcode').innerHTML = '';
@@ -1294,7 +1294,7 @@
 
         // ========== COUNTDOWN ==========
         function updateCountdown() {
-            const partyDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + ((6 - new Date().getDay() + 7) % 7), 19, 30).getTime();
+            const partyDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + ((6 - new Date().getDay() + 7) % 7), 22, 30).getTime();
             const now = new Date().getTime();
             const distance = partyDate - now;
 
