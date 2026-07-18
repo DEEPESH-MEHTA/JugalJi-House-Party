@@ -717,13 +717,13 @@
         }
 
         input[type="text"],
-        input[type="email"],
+        input[type="text"],
         textarea {
             color: white;
         }
 
         input[type="text"]::placeholder,
-        input[type="email"]::placeholder,
+        input[type="text"]::placeholder,
         textarea::placeholder {
             color: #888;
         }
@@ -844,7 +844,7 @@
                     <div class="countdown-box"><div class="countdown-num" id="cd-secs">00</div><div class="countdown-lbl">Secs</div></div>
                 </div>
                 <div style="margin-top: 1.5rem; font-size: 0.9rem; color: #ddd;">
-                    <p><i class="far fa-calendar-alt" style="color:var(--pink)"></i> This Saturday • <i class="far fa-clock" style="color:var(--cyan)"></i> 7:30 PM Onwards</p>
+                    <p><i class="far fa-calendar-alt" style="color:var(--pink)"></i> This Saturday • <i class="far fa-clock" style="color:var(--cyan)"></i> 10:30 PM Onwards</p>
                     <p style="margin-top: 5px; font-weight: bold; color: var(--gold)"><i class="fas fa-map-marker-alt"></i> <a href="https://maps.google.com/?q=Mithaiji,+T.+Nagar" target="_blank" class="location-link">Mithaiji, T. Nagar</a></p>
                 </div>
             </div>
@@ -929,7 +929,7 @@
                 <div id="rsvpFormSection" class="qr-form-section active">
                     <form style="display: flex; flex-direction: column; gap: 1rem;" onsubmit="handleRSVP(event)">
                         <input type="text" id="rsvpName" placeholder="Your name (if you dare)" required style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px;">
-                        <input type="email" id="rsvpEmail" placeholder="Your email (for regrets)" required style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px;">
+                        <input type="text" id="rsvpSchool" placeholder="Your School" required style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px;">
                         <textarea id="rsvpMessage" placeholder="Will you bring the vibes or the shame?" rows="3" style="padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px;"></textarea>
                         <button type="submit" class="btn-glow btn-gold" style="margin-top: 1rem;">YES, I'M IN! 🚀</button>
                     </form>
@@ -950,8 +950,8 @@
                                 <span class="qr-info-value" id="infoName">-</span>
                             </div>
                             <div class="qr-info-item">
-                                <span class="qr-info-label">Email:</span>
-                                <span class="qr-info-value" id="infoEmail">-</span>
+                                <span class="qr-info-label">School:</span>
+                                <span class="qr-info-value" id="infoSchool">-</span>
                             </div>
                             <div class="qr-info-item">
                                 <span class="qr-info-label">Alias:</span>
@@ -1075,7 +1075,7 @@
             event.preventDefault();
             
             const name = document.getElementById('rsvpName').value;
-            const email = document.getElementById('rsvpEmail').value;
+            const school = document.getElementById('rsvpSchool').value;
             const message = document.getElementById('rsvpMessage').value;
             
             const funnyName = generateFunnyName();
@@ -1083,7 +1083,7 @@
             // Store data for display
             rsvpData = {
                 name: name,
-                email: email,
+                school: school,
                 message: message,
                 alias: funnyName
             };
@@ -1097,13 +1097,13 @@
             
             // Populate info box
             document.getElementById('infoName').textContent = name;
-            document.getElementById('infoEmail').textContent = email;
+            document.getElementById('infoSchool').textContent = school;
             document.getElementById('infoAlias').textContent = funnyName;
             document.getElementById('infoVibe').textContent = message || 'Party Bound! 🎉';
             
             // Create QR code with SINGLE LINE text (no newlines)
             // QRCode.js doesn't support multiline text, so we use a compact format
-            const qrData = `JUGALJI|${name}|${email}|${funnyName}`;
+            const qrData = `JUGALJI|${name}|${school}|${funnyName}`;
             
             // Generate QR code
             document.getElementById('qrcode').innerHTML = '';
@@ -1121,7 +1121,7 @@
             document.getElementById('rsvpFormSection').classList.add('active');
             document.getElementById('qrSection').classList.remove('active');
             document.getElementById('rsvpName').value = '';
-            document.getElementById('rsvpEmail').value = '';
+            document.getElementById('rsvpSchool').value = '';
             document.getElementById('rsvpMessage').value = '';
             rsvpData = {};
         }
@@ -1294,7 +1294,7 @@
 
         // ========== COUNTDOWN ==========
         function updateCountdown() {
-            const partyDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + ((6 - new Date().getDay() + 7) % 7), 19, 30).getTime();
+            const partyDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + ((6 - new Date().getDay() + 7) % 7), 22, 30).getTime();
             const now = new Date().getTime();
             const distance = partyDate - now;
 
